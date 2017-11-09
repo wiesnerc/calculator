@@ -8,7 +8,7 @@
 #include "parser.h"
 #include "lexer.h"
 #include <math.h>   /* isnan. */
-#include <float.h>  /* DBL_EPSIOLON */
+#include <float.h>  /* DBL_EPSILON. */
 
 void yyerror (char const *); 
 %}

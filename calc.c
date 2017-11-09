@@ -12,7 +12,7 @@ putsym (char const *sym_name, int sym_type)
   ptr->name = (char *) malloc (strlen (sym_name) + 1);
   strcpy (ptr->name, sym_name);
   ptr->type = sym_type;
-  ptr->value.var = NAN; /* Set value to 0 even if fnct. */
+  ptr->value.var = NAN; /* Set value to NaN even if fnct. */
   ptr->next = (struct symrec *)sym_table;
   sym_table = ptr;
   return ptr;

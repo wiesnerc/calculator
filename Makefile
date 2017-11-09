@@ -1,9 +1,9 @@
-# Makefile
+# Makefile for calculator
 
 FILES	= lexer.c parser.c calc.c main.c
 CC	= gcc
 CFLAGS	= -lm
-BFLAGS  = --verbose 
+BFLAGS  = 
 
 calc:       $(FILES)
 	$(CC) $(CFLAGS) $(FILES) -o calc

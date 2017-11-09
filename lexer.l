@@ -44,7 +44,7 @@ SYMBL	[A-Za-z][A-Za-z0-9]*
 	  s = getsym ( yytext );
 	  if ( s == 0 ) 
 	    s = putsym( yytext, VAR ); /* if adding to the table, it's a VAR */
-	  *((symrec**) &yylval->VAR) = s; /* FCNT is also a symrec */
+	  *((symrec**) &yylval->VAR) = s; /* FCNT also symrec, so this works */
 	  return s->type;
 	}
 

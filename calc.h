@@ -22,12 +22,14 @@ extern symrec *sym_table;
 symrec *putsym (char const *, int);
 symrec *getsym (char const *);
 
+/* table to initialize mathematical constants */
 struct init_cnsts
 {
   char const *cname;
   double value;
 };
 
+/* table to initialize arithmitic functions */
 struct init_fncts
 {
   char const *fname;
