@@ -1,9 +1,11 @@
-%{
 /*
  * Parser.y file
  * calculator
  * To generate the parser run: "bison parser.y"
  */
+
+/* Prologue.  */ 
+%{ 
 #include "calc.h"   /* Contains definition of 'symrec'. */
 #include "parser.h"
 #include "lexer.h"
@@ -11,12 +13,14 @@
 #include <float.h>  /* DBL_EPSILON. */
 
 void yyerror (char const *); 
-%}
+extern int line;    /* keep track of current line for interactive prompt */
+extern int yy_interactive; /* Interactive input or not */
+%} 
+/* Bison declarations follow.  */
 
 %output "parser.c"
 %defines "parser.h"
 
-/* Bison declarations.  */
 %define api.pure 
 %define api.value.type union /* Generate YYSTYPE from these types: */
 %token <double> NUM          /* Simple double */
@@ -26,7 +30,7 @@ void yyerror (char const *);
 %precedence '='
 %left '-' '+'
 %left '*' '/' '%'
-%precedence NEG  /* negation--unary minus.. -2^3 = -8, like everyone else */
+%precedence NEG  /* negation--unary minus.. -2^2 = -4, like everyone else */
 %left '^'        /* exponentiation.. 2^2^2^2 = 256, like reduce and Matlab */
 %precedence FAC  /* factorial (unary) */
 %left '!'        /* 3!! = 720, %left or %right same result, may not matter */
@@ -37,7 +41,7 @@ void yyerror (char const *);
 /* Enable run-time traces (yydebug). */
 %define parse.trace
 
-/* Formatting semantic values. */
+/* Formatting semantic values, when debug enabled.  */
 %printer { fprintf (yyoutput, "%s", $$->name); } VAR;
 %printer { fprintf (yyoutput, "%s()", $$->name); } FNCT;
 %printer { fprintf (yyoutput, "%lg", $$); } <double>;
@@ -51,7 +55,10 @@ input:
 
 line:
   '\n'
-| exp '\n'           { printf ("\t%.10g\n", $1);                     }
+| exp '\n'           { /* here is where result gets passed back */
+                       printf ("\t%.10g\n", $1);    
+                       line++; /* increment line # for prompt */
+                     }
 | error '\n'         { yyerrok;                                      }
 ;
 
@@ -121,11 +128,15 @@ exp:
 | '(' exp ')'        { $$ = $2;                                      }
 ;
 /* End of grammar. */
-
 %%
+
+/* Epilogue.  */
 
 void
 yyerror ( char const *s )
 {
   fprintf(stderr, "%s\n", s);
+
+  if ( !yy_interactive ) /* exit on error if not an interactive prompt */
+    exit( 1 );
 }

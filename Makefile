@@ -5,6 +5,10 @@ CC	= gcc
 CFLAGS	= -lm
 BFLAGS  = 
 
+SHELL	:= /bin/bash
+TEST	:= ./test
+.PHONY : test
+
 calc:       $(FILES)
 	$(CC) $(CFLAGS) $(FILES) -o calc
 
@@ -16,3 +20,6 @@ parser.c:   parser.y lexer.c
 
 clean:
 	rm -f *.o *~ lexer.c lexer.h parser.c parser.h calc
+
+test:	calc.test
+	@$(TEST) calc.test || (echo "One or more tests failed" && exit 1)

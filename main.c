@@ -3,13 +3,15 @@
 #include "calc.h"   /* Contains definition of 'symrec'. */
 #include "parser.h"
 #include "lexer.h"
-#include <math.h>
+#include <math.h>   /* INFINITY */
+#include <float.h>   /* DBL_EPSILON */
 
 struct init_cnsts const math_cnsts[] =
 {
   { "pi", 3.1415926535897 },
   { "e",  2.7182818284590 },
   { "Inf",  INFINITY },
+  { "epsilon",  DBL_EPSILON },
   { 0, 0 }
 };
 
@@ -29,7 +31,7 @@ struct init_fncts const arith_fncts[] =
   { "ln",    log   },
   { "log",   log10 },
   { "log2",  log2  },
-  { "log1p", log1p },
+  { "ln1p",  log1p },
   { "trunc", trunc },
   { "ceil",  ceil  },
   { "floor", floor },
@@ -69,6 +71,9 @@ main (int argc, char const* argv[])
   for (int i=1; i<argc; ++i)
     if (!strcmp(argv[i], "-p"))
       yydebug = 1;
+
   init_table ();
+
+  //yy_scan_string("3*pi/2\n");
   return yyparse ();
 }
